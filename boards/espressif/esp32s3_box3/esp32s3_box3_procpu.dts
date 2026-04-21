@@ -11,6 +11,7 @@
 #include <espressif/partitions_0x0_amp_16M.dtsi>
 #include <zephyr/dt-bindings/i2c/i2c.h>
 #include "esp32s3_box3-pinctrl.dtsi"
+#include <zephyr/dt-bindings/input/esp32-touch-sensor-input.h>
 
 / {
 	model = "Espressif ESP32S3-BOX-3 PROCPU";
@@ -33,6 +34,7 @@
 		zephyr,code-partition = &slot0_partition;
 		zephyr,audio = &i2s0;
 		zephyr,display = &esp32_lcd;
+		zephyr,keyboard-scan = &gt911;
 	};
 
 	buttons {
@@ -126,6 +128,13 @@
 		mic-gain-db = <24>;
 		status = "okay";
 	};
+
+	gt911: gt911@5d {
+		compatible = "goodix,gt911";
+		reg = <0x5d>;
+		irq-gpios = <&gpio0 3 GPIO_ACTIVE_LOW>;
+		status = "okay";
+	};
 };
 
 &i2c1 {
@@ -139,6 +148,18 @@
 		reg = <0x28>;
 		status = "okay";
 	};
+};
+
+&touch {
+	debounce-interval-ms = <30>;
+	href-microvolt = <2700000>;
+	lref-microvolt = <500000>;
+	href-atten-microvolt = <1000000>;
+	filter-mode = <ESP32_TOUCH_FILTER_MODE_IIR_16>;
+	filter-debounce-cnt = <1>;
+	filter-noise-thr = <ESP32_TOUCH_FILTER_NOISE_THR_4_8TH>;
+	filter-jitter-step = <4>;
+	filter-smooth-level = <ESP32_TOUCH_FILTER_SMOOTH_MODE_IIR_2>;
 };
 
 &i2s0 {
