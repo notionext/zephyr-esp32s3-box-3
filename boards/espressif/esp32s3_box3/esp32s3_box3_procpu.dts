@@ -177,6 +177,10 @@
 	status = "okay";
 };
 
+&wifi {
+	status = "okay";
+};
+
 &gpio0 {
 	status = "okay";
 };
